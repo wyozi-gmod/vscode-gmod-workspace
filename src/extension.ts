@@ -45,21 +45,42 @@ export function activate(context: vscode.ExtensionContext) {
   }, 10000);
 
   const pushFileCommand = (type: string) => () => {
-	const absPath = vscode.window.activeTextEditor?.document.uri.fsPath;
-	if (absPath) {
-	  http.pushFileUpdate(pathToGModRelative(absPath), type);
-	}
+    const absPath = vscode.window.activeTextEditor?.document.uri.fsPath;
+    if (absPath) {
+      http.pushFileUpdate(pathToGModRelative(absPath), type);
+    }
   };
-  
+
   [
-	["gmod-workspace.runFileOnServer", "file-server"],
-	["gmod-workspace.runFileOnShared", "file-shared"],
-	["gmod-workspace.runFileOnClients", "file-clients"],
-	["gmod-workspace.runFileOnSelf", "file-self"],
+    ["gmod-workspace.runFileOnServer", "file-server"],
+    ["gmod-workspace.runFileOnShared", "file-shared"],
+    ["gmod-workspace.runFileOnClients", "file-clients"],
+    ["gmod-workspace.runFileOnSelf", "file-self"],
   ].forEach(([command, type]) => {
-	context.subscriptions.push(
-	  vscode.commands.registerCommand(command, pushFileCommand(type))
-	);
+    context.subscriptions.push(
+      vscode.commands.registerCommand(command, pushFileCommand(type))
+    );
+  });
+
+  const pushScriptCommand = (type: string) => () => {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      return; // No open text editor
+    }
+
+	const text = editor.document.getText(editor.selection);
+	http.pushScript(text, type);
+  };
+
+  [
+    ["gmod-workspace.runScriptOnServer", "script-server"],
+    ["gmod-workspace.runScriptOnShared", "script-shared"],
+    ["gmod-workspace.runScriptOnClients", "script-clients"],
+    ["gmod-workspace.runScriptOnSelf", "script-self"],
+  ].forEach(([command, type]) => {
+    context.subscriptions.push(
+      vscode.commands.registerCommand(command, pushScriptCommand(type))
+    );
   });
 }
 

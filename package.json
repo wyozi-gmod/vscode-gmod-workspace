@@ -35,6 +35,23 @@
         "command": "gmod-workspace.runFileOnSelf",
 		"title": "GModDev: File / self",
 		"when": "resourceExtname == .lua"
+	  },
+	  
+      {
+        "command": "gmod-workspace.runScriptOnServer",
+		"title": "GModDev: Script / server"
+	  },
+	  {
+        "command": "gmod-workspace.runScriptOnShared",
+		"title": "GModDev: Script / shared"
+      },
+	  {
+        "command": "gmod-workspace.runScriptOnClients",
+		"title": "GModDev: Script / clients"
+      },
+	  {
+        "command": "gmod-workspace.runScriptOnSelf",
+		"title": "GModDev: Script / self"
       }
     ],
     "menus": {
@@ -53,6 +70,22 @@
         },
         {
           "command": "gmod-workspace.runFileOnSelf",
+          "when": "gmod-workspace:running"
+        },
+        {
+          "command": "gmod-workspace.runScriptOnServer",
+          "when": "gmod-workspace:running"
+        },
+        {
+          "command": "gmod-workspace.runScriptOnShared",
+          "when": "gmod-workspace:running"
+        },
+        {
+          "command": "gmod-workspace.runScriptOnClients",
+          "when": "gmod-workspace:running"
+        },
+        {
+          "command": "gmod-workspace.runScriptOnSelf",
           "when": "gmod-workspace:running"
         }
       ]

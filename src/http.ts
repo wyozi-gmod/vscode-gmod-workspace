@@ -7,7 +7,9 @@ export class HTTP {
   private server: polka.Polka;
   private port: number;
 
-  private fileUpdates: { path: string; type: string }[] = [];
+  private fileUpdates: Array<
+    { script: string; type: string } | { path: string; type: string }
+  > = [];
 
   private callback: (() => void) | null = null;
 
@@ -45,6 +47,10 @@ export class HTTP {
 
   pushFileUpdate(gmodPath: string, type: string) {
     this.fileUpdates.push({ path: gmodPath, type });
+  }
+
+  pushScript(script: string, type: string) {
+    this.fileUpdates.push({ script, type });
   }
 
   dispose() {
