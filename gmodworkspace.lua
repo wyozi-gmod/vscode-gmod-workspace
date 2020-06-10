@@ -28,7 +28,7 @@ function entitypath.Analyze(path)
     if folder and file and gm_subentityfolders[folder] then
         return "entity", file, "sh"
     end
-    
+
 	-- try to find a folder entity in entities folder
 	-- in this case we can even skip the folder_ent_names and guess the realm
 	local folder, file = string.match(path, ".-/entities/([^/]+)/([^/]+)%.lua$")
@@ -73,11 +73,11 @@ end
 local active, passive
 
 function active(version, callback)
-    print "[GModDev] Active scanning enabled"
+    print "[GModWorkspace] Active scanning enabled"
 
     while true do
         if __gmod_workspace_v ~= version then
-            print "[GModDev] New workspace loop detected"
+            print "[GModWorkspace] New workspace loop detected"
             return
         end
         local res = cofetch(DEV_SERVER_URL)
@@ -93,11 +93,11 @@ end
 
 -- Passively scan the URL for an available HTTP server
 function passive(version, callback)
-    print "[GModDev] Reducing to passive scanning"
+    print "[GModWorkspace] Reducing to passive scanning"
 
     while true do
         if __gmod_workspace_v ~= version then
-            print "[GModDev] New workspace loop detected"
+            print "[GModWorkspace] New workspace loop detected"
             return
         end
         local res = cofetch(DEV_SERVER_URL)
@@ -115,7 +115,7 @@ local function processCommands(cmds)
         if cmd.path then
             local src = file.Read(cmd.path, "GAME")
             if src then
-                print("[GModDev] running ", cmd.path, "on", cmd.type)
+                print("[GModWorkspace] running ", cmd.path, "on", cmd.type)
 
                 local specialType, specialId, specialRealm =
                     entitypath.Analyze(cmd.path)
@@ -143,13 +143,13 @@ local function processCommands(cmds)
                     end
                     luadev.RunOnClient(src, ply, cmd.path, extras)
                 else
-                    print("[GModDev] unsupported path cmd type", cmd.type)
+                    print("[GModWorkspace] unsupported path cmd type", cmd.type)
                 end
             else
-                print("[GModDev] did not find ", cmd.path)
+                print("[GModWorkspace] did not find ", cmd.path)
             end
         elseif cmd.script then
-            print("[GModDev] running a script on", cmd.type)
+            print("[GModWorkspace] running a script on", cmd.type)
             if cmd.type == "script-server" then
                 luadev.RunOnServer(cmd.script, "gmod-workspace-sv")
             elseif cmd.type == "script-shared" then
@@ -168,7 +168,7 @@ local function processCommands(cmds)
                 end
                 luadev.RunOnClient(cmd.script, ply, "gmod-workspace-self")
             else
-                print("[GModDev] unsupported path cmd type", cmd.type)
+                print("[GModWorkspace] unsupported path cmd type", cmd.type)
             end
         end
     end
@@ -181,7 +181,7 @@ __gmod_workspace_co = coroutine.create(function()
         passive(__gmod_workspace_v, processCommands)
     end, debug.traceback)
     if not b then
-        print("[GModDev] Coroutine error: ", err)
+        print("[GModWorkspace] Coroutine error: ", err)
     end
 end)
 coroutine.resume(__gmod_workspace_co)
