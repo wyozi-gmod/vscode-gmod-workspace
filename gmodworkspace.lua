@@ -91,6 +91,8 @@ end
 
 if SERVER then
 
+    util.AddNetworkString("gmodwslua")
+
     local DEV_SERVER_URL = "http://localhost:56748/run-queue"
 
     print "GMod Workspace loading"
