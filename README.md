@@ -13,6 +13,7 @@ and triggerable remotely.
   - `-allowlocalhttp` startup parameter (so we can query the VSCode server)
   - [LuaDev](https://github.com/Metastruct/luadev) installed to addons
   - `gmodworkspace.lua` installed to `garrysmod/lua/autorun/server`
+    - You can do this with included VSCode command "GModDev: Install Lua module"
 
 ## Running
 

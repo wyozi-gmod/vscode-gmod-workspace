@@ -17,6 +17,10 @@
   "contributes": {
     "commands": [
       {
+        "command": "gmod-workspace.installLua",
+        "title": "GModDev: Install Lua module"
+      },
+      {
         "command": "gmod-workspace.runFileOnServer",
         "title": "GModDev: File / server",
         "when": "resourceExtname == .lua"

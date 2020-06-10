@@ -3,6 +3,7 @@
 import * as vscode from "vscode";
 import { HTTP } from "./http";
 import { pathToGModRelative } from "./gmodPath";
+import { installLua } from "./luaInstallation";
 
 let http: HTTP;
 let serverStatusBarItem: vscode.StatusBarItem;
@@ -50,6 +51,12 @@ export function activate(context: vscode.ExtensionContext) {
       http.pushFileUpdate(pathToGModRelative(absPath), type);
     }
   };
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("gmod-workspace.installLua", () => {
+      installLua(context.extensionPath);
+    })
+  );
 
   [
     ["gmod-workspace.runFileOnServer", "file-server"],
