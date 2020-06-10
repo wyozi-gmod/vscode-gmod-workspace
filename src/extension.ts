@@ -68,8 +68,8 @@ export function activate(context: vscode.ExtensionContext) {
       return; // No open text editor
     }
 
-	const text = editor.document.getText(editor.selection);
-	http.pushScript(text, type);
+    const text = editor.document.getText(editor.selection);
+    http.pushScript(text, type);
   };
 
   [

@@ -74,15 +74,19 @@ local function processCommands(cmds)
     for _,cmd in pairs(cmds) do
         if cmd.path then
             local src = file.Read(cmd.path, "GAME")
-            print("[GModDev] running ", cmd.path, "on", cmd.type)
-            if cmd.type == "file-server" then
-                luadev.RunOnServer(src, cmd.path)
-            elseif cmd.type == "file-shared" then
-                luadev.RunOnShared(src, cmd.path)
-            elseif cmd.type == "file-clients" then
-                luadev.RunOnClients(src, cmd.path)
+            if src then
+                print("[GModDev] running ", cmd.path, "on", cmd.type)
+                if cmd.type == "file-server" then
+                    luadev.RunOnServer(src, cmd.path)
+                elseif cmd.type == "file-shared" then
+                    luadev.RunOnShared(src, cmd.path)
+                elseif cmd.type == "file-clients" then
+                    luadev.RunOnClients(src, cmd.path)
+                else
+                    print("[GModDev] unsupported path cmd type", cmd.type)
+                end
             else
-                print("unsupported path cmd type", cmd.type)
+                print("[GModDev] did not find ", cmd.path)
             end
         elseif cmd.script then
             print("[GModDev] running a script on", cmd.type)
@@ -93,7 +97,7 @@ local function processCommands(cmds)
             elseif cmd.type == "script-clients" then
                 luadev.RunOnClients(cmd.script, "gmod-workspace-cl")
             else
-                print("unsupported path cmd type", cmd.type)
+                print("[GModDev] unsupported path cmd type", cmd.type)
             end
         end
     end
