@@ -11,8 +11,7 @@ and triggerable remotely.
   - [Remote - SSH](https://code.visualstudio.com/docs/remote/ssh) connected to the same server as SRCDS
 - **GarrysMod Server**
   - `-allowlocalhttp` startup parameter (so we can query the VSCode server)
-  - [LuaDev](https://github.com/Metastruct/luadev) installed to addons
-  - `gmodworkspace.lua` installed to `garrysmod/lua/autorun/server`
+  - `gmodworkspace.lua` installed to `garrysmod/lua/autorun`
     - You can do this with included VSCode command "GModDev: Install Lua module"
 
 ## Running
@@ -26,7 +25,7 @@ You should see "GMod: Waiting" entry in the VSCode status bar. This means that w
 >
 > Make sure you open the `garrysmod` folder (with addons, gamemodes, etc) in VSCode 
 
-Assuming you have correctly installed `gmodworkspace.lua`, the status bar item should turn into "GMod: Connected" soon. This means that the server is succesfully requesting data from our editor and the workflow should be enabledß.
+Assuming you have correctly installed `gmodworkspace.lua`, the status bar item should turn into "GMod: Connected" soon. This means that the server is succesfully requesting data from our editor and the workflow should be enabled.
 
 Now you can start using the extension. Edit something, run one of the commands starting with "GModDev: Run", and you should see the file be refreshed ingame (or an error message in console).
 

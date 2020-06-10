@@ -7,7 +7,7 @@ export const installLua = async (extensionPath: string) => {
   );
 
   const files = await vscode.workspace.findFiles(
-    "**/lua/autorun/server/admin_functions.lua"
+    "**/lua/autorun/base_npcs.lua"
   );
 
   const file = files[0];
@@ -26,7 +26,7 @@ export const installLua = async (extensionPath: string) => {
     // TODO we could use gmod-workspace itself to reload the script
   } else {
     vscode.window.showErrorMessage(
-      `Unable to find GarrysMod root autorun folder (we looked for "lua/autorun/server/admin_functions.lua" in workspace)`
+      `Unable to find GarrysMod root autorun folder (we looked for "lua/autorun/base_npcs.lua" within workspace)`
     );
   }
 
