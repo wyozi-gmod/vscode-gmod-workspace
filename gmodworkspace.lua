@@ -126,6 +126,17 @@ local function processCommands(cmds)
                     luadev.RunOnShared(src, cmd.path, extras)
                 elseif cmd.type == "file-clients" then
                     luadev.RunOnClients(src, cmd.path, extras)
+                elseif cmd.type == "file-self" then
+                    -- TODO more robust self finding
+                
+                    local ply
+                    for _,p in pairs(player.GetAll()) do
+                        if p:IsSuperAdmin() then
+                            ply = p
+                            break
+                        end
+                    end
+                    luadev.RunOnClient(src, ply, cmd.path, extras)
                 else
                     print("[GModDev] unsupported path cmd type", cmd.type)
                 end
@@ -140,6 +151,17 @@ local function processCommands(cmds)
                 luadev.RunOnShared(cmd.script, "gmod-workspace-sh")
             elseif cmd.type == "script-clients" then
                 luadev.RunOnClients(cmd.script, "gmod-workspace-cl")
+            elseif cmd.type == "script-self" then
+                -- TODO more robust self finding
+
+                local ply
+                for _,p in pairs(player.GetAll()) do
+                    if p:IsSuperAdmin() then
+                        ply = p
+                        break
+                    end
+                end
+                luadev.RunOnClient(cmd.script, ply, "gmod-workspace-self")
             else
                 print("[GModDev] unsupported path cmd type", cmd.type)
             end
