@@ -18,40 +18,39 @@
     "commands": [
       {
         "command": "gmod-workspace.runFileOnServer",
-		"title": "GModDev: File / server",
-		"when": "resourceExtname == .lua"
-	  },
-	  {
+        "title": "GModDev: File / server",
+        "when": "resourceExtname == .lua"
+      },
+      {
         "command": "gmod-workspace.runFileOnShared",
-		"title": "GModDev: File / shared",
-		"when": "resourceExtname == .lua"
+        "title": "GModDev: File / shared",
+        "when": "resourceExtname == .lua"
       },
-	  {
+      {
         "command": "gmod-workspace.runFileOnClients",
-		"title": "GModDev: File / clients",
-		"when": "resourceExtname == .lua"
+        "title": "GModDev: File / clients",
+        "when": "resourceExtname == .lua"
       },
-	  {
+      {
         "command": "gmod-workspace.runFileOnSelf",
-		"title": "GModDev: File / self",
-		"when": "resourceExtname == .lua"
-	  },
-	  
+        "title": "GModDev: File / self",
+        "when": "resourceExtname == .lua"
+      },
       {
         "command": "gmod-workspace.runScriptOnServer",
-		"title": "GModDev: Script / server"
-	  },
-	  {
+        "title": "GModDev: Script / server"
+      },
+      {
         "command": "gmod-workspace.runScriptOnShared",
-		"title": "GModDev: Script / shared"
+        "title": "GModDev: Script / shared"
       },
-	  {
+      {
         "command": "gmod-workspace.runScriptOnClients",
-		"title": "GModDev: Script / clients"
+        "title": "GModDev: Script / clients"
       },
-	  {
+      {
         "command": "gmod-workspace.runScriptOnSelf",
-		"title": "GModDev: Script / self"
+        "title": "GModDev: Script / self"
       }
     ],
     "menus": {

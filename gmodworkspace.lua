@@ -2,6 +2,42 @@ local DEV_SERVER_URL = "http://localhost:56748/run-queue"
 
 print "GMod Workspace loading"
 
+-- from https://github.com/wyozi/g-ace/blob/master/lua/gace/util/entitypath.lua
+local entitypath = {}
+
+local folder_ent_names = {
+	["cl_init"] = "cl",
+	["init"] = "sv",
+	["shared"] = "sh",
+}
+
+local gm_subentityfolders = {
+	["entities"] = true,
+	["weapons"] = true,
+	["effects"] = true,
+}
+
+function entitypath.Analyze(path)
+	-- if it's a folder ent in other folder with specified name, use that
+	local folder, file = string.match(path, ".-([^/]+)/([^/]+)%.lua$")
+	if folder and file and folder_ent_names[file] then
+		return "entity", folder, folder_ent_names[file]
+	end
+	
+	-- try to find a folder entity in entities folder
+	-- in this case we can even skip the folder_ent_names and guess the realm
+	local folder, file = string.match(path, ".-/entities/([^/]+)/([^/]+)%.lua$")
+	if folder and file and not gm_subentityfolders[folder] then
+		local realm = "sh"
+		if string.match(file, "^cl_") then
+			realm = "cl"
+		elseif string.match(file, "^sv_") then
+			realm = "sv"
+		end
+		return "entity", folder, realm
+	end
+end
+
 local function cofetch(url, headers)
     local co = coroutine.running()
     assert(co)
@@ -70,18 +106,26 @@ function passive(version, callback)
 end
 
 local function processCommands(cmds)
-    --print(util.TableToJSON(cmds))
     for _,cmd in pairs(cmds) do
         if cmd.path then
             local src = file.Read(cmd.path, "GAME")
             if src then
                 print("[GModDev] running ", cmd.path, "on", cmd.type)
+
+                local specialType, specialId, specialRealm =
+                    entitypath.Analyze(cmd.path)
+
+                local extras =
+                    specialType == "entity" and {sent = specialId} or
+                    specialType == "effect" and {effect = specialId} or
+                    specialType == "weapon" and {swep = specialId} or nil
+
                 if cmd.type == "file-server" then
-                    luadev.RunOnServer(src, cmd.path)
+                    luadev.RunOnServer(src, cmd.path, extras)
                 elseif cmd.type == "file-shared" then
-                    luadev.RunOnShared(src, cmd.path)
+                    luadev.RunOnShared(src, cmd.path, extras)
                 elseif cmd.type == "file-clients" then
-                    luadev.RunOnClients(src, cmd.path)
+                    luadev.RunOnClients(src, cmd.path, extras)
                 else
                     print("[GModDev] unsupported path cmd type", cmd.type)
                 end
@@ -106,6 +150,11 @@ end
 -- Create a global so that GC doesn't bite us
 __gmod_workspace_v = math.random()
 __gmod_workspace_co = coroutine.create(function()
-    passive(__gmod_workspace_v, processCommands)
+    local b, err = xpcall(function()
+        passive(__gmod_workspace_v, processCommands)
+    end, debug.traceback)
+    if not b then
+        print("[GModDev] Coroutine error: ", err)
+    end
 end)
 coroutine.resume(__gmod_workspace_co)
