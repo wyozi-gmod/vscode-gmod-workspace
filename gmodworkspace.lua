@@ -24,6 +24,11 @@ function entitypath.Analyze(path)
 		return "entity", folder, folder_ent_names[file]
 	end
 	
+    -- if it's a one-file entity
+    if folder and file and gm_subentityfolders[folder] then
+        return "entity", file, "sh"
+    end
+    
 	-- try to find a folder entity in entities folder
 	-- in this case we can even skip the folder_ent_names and guess the realm
 	local folder, file = string.match(path, ".-/entities/([^/]+)/([^/]+)%.lua$")
