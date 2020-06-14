@@ -75,7 +75,8 @@ export function activate(context: vscode.ExtensionContext) {
       return; // No open text editor
     }
 
-    const text = editor.document.getText(editor.selection);
+    const selection = editor.selection;
+    const text = editor.document.getText(selection.isEmpty ? undefined : selection);
     http.pushScript(text, type);
   };
 
