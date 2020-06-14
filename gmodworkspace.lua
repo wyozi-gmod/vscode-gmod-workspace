@@ -10,9 +10,9 @@ local folder_ent_names = {
 }
 
 local gm_subentityfolders = {
-    ["entities"] = true,
-    ["weapons"] = true,
-    ["effects"] = true,
+    ["entities"] = "entity",
+    ["weapons"] = "weapon",
+    ["effects"] = "effect",
 }
 
 function entitypath.Analyze(path)
@@ -24,7 +24,7 @@ function entitypath.Analyze(path)
 
     -- if it's a one-file entity
     if folder and file and gm_subentityfolders[folder] then
-        return "entity", file, "sh"
+        return gm_subentityfolders[folder], file, "sh"
     end
     
     -- try to find a folder entity in entities folder
@@ -39,10 +39,17 @@ function entitypath.Analyze(path)
         end
         return "entity", folder, realm
     end
+    if folder and file and gm_subentityfolders[folder] then
+        local realm = "sh"
+        if folder == "effects" then
+            realm = "cl"
+        end
+        return gm_subentityfolders[folder], file, realm
+    end
 end
 
 local sluaTemplate = {
-    swep = [[
+    weapon = [[
         local SWEP = weapons.GetStored("${entname}") or { t = {} }
         SWEP.Primary = SWEP.Primary or {}
         SWEP.Secondary = SWEP.Secondary or {}
@@ -73,6 +80,7 @@ local function RunLua(src, path)
 
     local template = specialType and sluaTemplate[specialType]
     if template then
+        print("[GModWorkspace] ", path, "recognized as", specialType)
         src = interp(template, {code = src, entname = specialId})
     end
 
