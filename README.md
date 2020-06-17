@@ -29,6 +29,23 @@ Assuming you have correctly installed `gmodworkspace.lua`, the status bar item s
 
 Now you can start using the extension. Edit something, run one of the commands starting with "GModDev: Run", and you should see the file be refreshed ingame (or an error message in console).
 
+## Detecting updates from Lua
+
+The Lua runtime sets a global variable `GMODWS_UPDATE` when a Lua script is run using GMod workspace.
+
+You can use the global to easily reload things, e.g.
+```lua
+local function myTimer()
+  -- Do something expensive
+end
+timer.Create("periodicRunner", 60, 0, myTimer)
+
+if GMODWS_UPDATE then
+  -- only executed when this file is run by GModWorkspace
+  myTimer()
+end
+```
+
 ## Architecture
 
 1. VSCode extension detects that we're in Garry's Mod folder and activates a local HTTP server

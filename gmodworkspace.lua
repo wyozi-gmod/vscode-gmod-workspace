@@ -88,9 +88,11 @@ local function RunLua(src, path)
     if type(func) == "string" then
         print("[GModWorkspace] script ", path, " compilation failed: ", func)
     else
+        GMODWS_UPDATE = true
         local b, err = xpcall(function()
             func()
         end, debug.traceback)
+        GMODWS_UPDATE = nil
         if not b then
             print("[GModWorkspace] script ", path, " errored: ", err)
         end
