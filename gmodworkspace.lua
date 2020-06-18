@@ -192,17 +192,18 @@ if SERVER then
                     end
                     
                     if cmd.type == "file-self" then
-                        local ply
+                        local admins = {}
                         for _,p in pairs(player.GetAll()) do
                             if p:IsSuperAdmin() then
-                                ply = p
-                                break
+                                table.insert(admins, p)
                             end
                         end
-                        net.Start("gmodwslua")
-                        net.WriteString(src)
-                        net.WriteString(cmd.path)
-                        net.Send(ply)
+                        if #admins > 0 then
+                            net.Start("gmodwslua")
+                            net.WriteString(src)
+                            net.WriteString(cmd.path)
+                            net.Send(admins)
+                        end
                     end
                 else
                     print("[GModDev] did not find ", cmd.path)
@@ -221,17 +222,18 @@ if SERVER then
                     net.Broadcast()
                 end                
                 if cmd.type == "script-self" then
-                    local ply
+                    local admins = {}
                     for _,p in pairs(player.GetAll()) do
                         if p:IsSuperAdmin() then
-                            ply = p
-                            break
+                            table.insert(admins, p)
                         end
                     end
-                    net.Start("gmodwslua")
-                    net.WriteString(src)
-                    net.WriteString("gmod-workspace-script")
-                    net.Send(ply)
+                    if #admins > 0 then
+                        net.Start("gmodwslua")
+                        net.WriteString(src)
+                        net.WriteString("gmod-workspace-script")
+                        net.Send(admins)
+                    end
                 end
             end
         end
