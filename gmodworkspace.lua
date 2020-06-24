@@ -16,35 +16,31 @@ local gm_subentityfolders = {
 }
 
 function entitypath.Analyze(path)
-    -- if it's a folder ent in other folder with specified name, use that
-    local folder, file = string.match(path, ".-([^/]+)/([^/]+)%.lua$")
-    if folder and file and folder_ent_names[file] then
-        return "entity", folder, folder_ent_names[file]
-    end
-
-    -- if it's a one-file entity
-    if folder and file and gm_subentityfolders[folder] then
-        return gm_subentityfolders[folder], file, "sh"
+    -- Match against a single-file entity (<category>/<entity_name>.lua)
+    local category, entity_file =
+        string.match(path, "([^/]+)/([^/]+)%.lua$")
+    
+    if gm_subentityfolders[category] then
+        if category == "effects" then
+            return "effect", entity_file, "cl"
+        else
+            return gm_subentityfolders[category], entity_file, "sh"
+        end
     end
     
-    -- try to find a folder entity in entities folder
-    -- in this case we can even skip the folder_ent_names and guess the realm
-    local folder, file = string.match(path, ".-/entities/([^/]+)/([^/]+)%.lua$")
-    if folder and file and not gm_subentityfolders[folder] then
-        local realm = "sh"
+    -- Match against a file-based entity (<category>/<entity_name>/<filename>.lua)
+
+    local category, entity, file =
+        string.match(path, "([^/]+)/([^/]+)/([^/]+)%.lua$")
+
+    if gm_subentityfolders[category] then
+        local realm = folder_ent_names[file]
         if string.match(file, "^cl_") then
             realm = "cl"
         elseif string.match(file, "^sv_") then
             realm = "sv"
         end
-        return "entity", folder, realm
-    end
-    if folder and file and gm_subentityfolders[folder] then
-        local realm = "sh"
-        if folder == "effects" then
-            realm = "cl"
-        end
-        return gm_subentityfolders[folder], file, realm
+        return gm_subentityfolders[category], entity, realm
     end
 end
 
